@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Registration</title>
+  <!-- Link to Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <!-- Optional: Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <!-- Custom CSS -->
+  <style>
+    /* Light Theme Styles */
+    body {
+      background-color: #f8f9fa; /* Light gray background */
+      color: #212529;
+      font-family: 'Arial', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .container {
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #ffffff; /* White card background */
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #0044ff; /* Primary blue color */
+    }
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      display: block;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      transition: border-color 0.3s ease;
+    }
+    input:focus {
+      border-color: #0044ff; /* Highlight on focus */
+      outline: none;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #0044ff; /* Primary blue button */
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #0033cc; /* Darker blue on hover */
+    }
+    .error-message {
+      color: red;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .password-hint {
+      font-size: 0.7rem;
+      color: #6c757d;
+      margin-top: -10px;
+      margin-bottom: 15px;
+      display: block;
+    }
+    .password-error {
+      color: red;
+      font-size: 12px;
+      margin-top: -10px;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    /* Dark Theme Styles */
+    body.dark-mode {
+      background-color: #121212; /* Dark background */
+      color: #e0e0e0; /* Light text */
+    }
+    body.dark-mode .container {
+      background-color: #1e1e1e; /* Dark card background */
+      box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1); /* Subtle shadow for dark mode */
+    }
+    body.dark-mode h2 {
+      color: #1e88e5; /* Light blue heading */
+    }
+    body.dark-mode label {
+      color: #e0e0e0; /* Light text for labels */
+    }
+    body.dark-mode input[type="text"],
+    body.dark-mode input[type="email"],
+    body.dark-mode input[type="password"] {
+      background-color: #2c2c2c; /* Dark input background */
+      border-color: #444; /* Dark border */
+      color: #e0e0e0; /* Light text inside inputs */
+    }
+    body.dark-mode input[type="text"]::placeholder,
+    body.dark-mode input[type="email"]::placeholder,
+    body.dark-mode input[type="password"]::placeholder {
+      color: #aaa; /* Muted placeholder text */
+    }
+    body.dark-mode input:focus {
+      border-color: #1e88e5; /* Highlight on focus */
+    }
+    body.dark-mode button {
+      background-color: #1e88e5; /* Light blue button */
+    }
+    body.dark-mode button:hover {
+      background-color: #1565c0; /* Slightly darker blue on hover */
+    }
+    body.dark-mode .password-hint {
+      color: #aaa; /* Muted hint text */
+    }
+    body.dark-mode .error-message {
+      color: #ff5252; /* Bright red error message */
+    }
+
+    /* Switch Mode Button */
+    .theme-switch {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 30px;
+      background-color: #ccc;
+      border-radius: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease;
+    }
+    .theme-switch.dark-mode {
+      background-color: #1e88e5;
+    }
+    .theme-switch .switch-circle {
+      width: 20px;
+      height: 20px;
+      background-color: white;
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+    .theme-switch.dark-mode .switch-circle {
+      transform: translateX(30px);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Admin Registration</h2>
+    <% if (error) { %>
+      <p class="error-message"><%= error %></p>
+    <% } %>
+    <form id="adminRegisterForm" action="/admin/register" method="POST">
+      <label for="adminId">Admin ID:</label>
+      <input type="text" id="adminId" name="adminId" placeholder="Enter Admin ID" required>
+      
+      <label for="firstName">First Name:</label>
+      <input type="text" id="firstName" name="firstName" placeholder="Enter First Name" required>
+      
+      <label for="lastName">Last Name:</label>
+      <input type="text" id="lastName" name="lastName" placeholder="Enter Last Name" required>
+      
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" placeholder="Enter Email" required>
+      
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" placeholder="Enter Password" required>
+      <span class="password-hint">
+        Password must be at least 8 characters long and contain at least one letter and one number.
+      </span>
+      <span class="password-error" id="passwordError">
+        Password does not meet the requirements.
+      </span>
+      
+      <button type="submit" id="submitButton">Register</button>
+    </form>
+  </div>
+
+  <!-- Theme Switch Button -->
+  <div class="theme-switch" id="themeSwitch">
+    <div class="switch-circle"></div>
+  </div>
+
+  <!-- Optional: Include Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script>
+    // Password validation logic
+    const passwordInput = document.getElementById('password');
+    const passwordError = document.getElementById('passwordError');
+    const submitButton = document.getElementById('submitButton');
+    function validatePassword(password) {
+      const hasLetter = /[a-zA-Z]/.test(password); // Check for at least one letter (uppercase or lowercase)
+      const hasNumber = /[0-9]/.test(password);   // Check for at least one number
+      const isLongEnough = password.length >= 8;  // Check for minimum length of 8 characters
+      return hasLetter && hasNumber && isLongEnough; // All conditions must be true
+    }
+    passwordInput.addEventListener('input', () => {
+      if (!validatePassword(passwordInput.value)) {
+        passwordError.style.display = 'block';
+        submitButton.disabled = true;
+      } else {
+        passwordError.style.display = 'none';
+        submitButton.disabled = false;
+      }
+    });
+    document.getElementById('adminRegisterForm').addEventListener('submit', (e) => {
+      if (!validatePassword(passwordInput.value)) {
+        e.preventDefault(); // Prevent form submission if validation fails
+        passwordError.style.display = 'block';
+      }
+    });
+
+    // Theme Toggle Logic
+    const themeSwitch = document.getElementById('themeSwitch');
+    const body = document.body;
+
+    // Check localStorage for theme preference
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme === 'dark') {
+      body.classList.add('dark-mode');
+      themeSwitch.classList.add('dark-mode');
+    }
+
+    // Toggle theme on button click
+    themeSwitch.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      themeSwitch.classList.toggle('dark-mode');
+
+      // Save theme preference to localStorage
+      if (body.classList.contains('dark-mode')) {
+        localStorage.setItem('theme', 'dark');
+      } else {
+        localStorage.setItem('theme', 'light');
+      }
+    });
+  </script>
+</body>
+</html>

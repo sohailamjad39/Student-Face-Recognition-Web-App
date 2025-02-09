@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Notifications - Admin Dashboard</title>
+  <!-- Link to Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    /* Light Theme Styles */
+    body {
+      background-color: #f8f9fa;
+      color: #212529;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .navbar {
+      background-color: #ffffff !important;
+      border-bottom: 1px solid #ddd;
+    }
+    .sidebar {
+      background-color: #ffffff;
+      border-right: 1px solid #ddd;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .table-striped tbody tr:nth-of-type(odd) {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #0056b3;
+    }
+    .btn-danger {
+      background-color: #dc3545;
+      border-color: #dc3545;
+    }
+    .btn-danger:hover {
+      background-color: #bd2130;
+      border-color: #b21f2d;
+    }
+
+    /* Dark Theme Styles */
+    body.dark-mode {
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+    body.dark-mode .navbar {
+      background-color: #1e1e1e !important;
+      border-bottom: 1px solid #333;
+    }
+    body.dark-mode .navbar-brand,
+    body.dark-mode .nav-link {
+      color: #e0e0e0 !important;
+    }
+    body.dark-mode .navbar-brand:hover,
+    body.dark-mode .nav-link:hover {
+      color: #ffffff !important;
+    }
+    body.dark-mode .sidebar {
+      background-color: #1e1e1e !important; /* Explicitly set sidebar background */
+      border-right: 1px solid #333;
+    }
+    body.dark-mode .sidebar .nav-link {
+      color: #e0e0e0 !important;
+    }
+    body.dark-mode .sidebar .nav-link.active {
+      color: #ffffff !important;
+      background-color: rgba(30, 68, 255, 0.2) !important;
+    }
+    body.dark-mode .table-striped tbody tr:nth-of-type(odd) {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    body.dark-mode .table-striped tbody tr {
+      background-color: #1e1e1e;
+    }
+    body.dark-mode .btn-primary {
+      background-color: #1e88e5;
+      border-color: #1e88e5;
+    }
+    body.dark-mode .btn-primary:hover {
+      background-color: #1565c0;
+      border-color: #1565c0;
+    }
+    body.dark-mode .btn-danger {
+      background-color: #c62828;
+      border-color: #c62828;
+    }
+    body.dark-mode .btn-danger:hover {
+      background-color: #b71c1c;
+      border-color: #b71c1c;
+    }
+
+    /* Switch Mode Button */
+    .theme-switch {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 30px;
+      background-color: #ccc;
+      border-radius: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease;
+    }
+    .theme-switch.dark-mode {
+      background-color: #1e88e5;
+    }
+    .theme-switch .switch-circle {
+      width: 20px;
+      height: 20px;
+      background-color: white;
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+    .theme-switch.dark-mode .switch-circle {
+      transform: translateX(30px);
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/admin/dashboard">MyProject Admin</a>
+    <form class="form-inline my-2 my-lg-0 ml-auto">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <ul class="navbar-nav ml-3">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
+          <img src="/images/NUTECH_logo.png" alt="Admin Avatar" class="rounded-circle" width="30"> Admin
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="/admin/profile">Profile</a>
+          <a class="dropdown-item" href="/admin/settings">Settings</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/admin/logout">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </header>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- SIDEBAR -->
+      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/dashboard">
+                <i class="fa fa-home"></i> Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/students">
+                <i class="fa fa-users"></i> Students
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/notifications" style="background-color: rgba(0, 68, 255, 0.1); border-radius: 5px;">
+                <i class="fa fa-bell"></i> Notifications
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- MAIN CONTENT -->
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <div class="pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Notifications</h1>
+        </div>
+        <!-- NOTIFICATIONS TABLE -->
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Message</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (notifications.length > 0) { %>
+              <% notifications.forEach(notification => { %>
+                <tr class="<%= notification.isRead ? '' : 'font-weight-bold' %>">
+                  <td><%= notification.message %></td>
+                  <td><%= notification.createdAt.toLocaleDateString() %></td>
+                  <td><%= notification.isRead ? 'Read' : 'Unread' %></td>
+                  <td>
+                    <form action="/admin/notifications/<%= notification._id %>/mark-read" method="POST" style="display: inline;">
+                      <button type="submit" class="btn btn-sm btn-primary">Mark as Read</button>
+                    </form>
+                    <form action="/admin/notifications/<%= notification._id %>/delete" method="POST" style="display: inline;">
+                      <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }); %>
+            <% } else { %>
+              <tr>
+                <td colspan="4" class="text-center">No notifications found.</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </main>
+    </div>
+  </div>
+
+  <!-- Theme Switch Button -->
+  <div class="theme-switch" id="themeSwitch">
+    <div class="switch-circle"></div>
+  </div>
+
+  <!-- Optional: Include jQuery and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script>
+    // Theme Toggle Logic
+    const themeSwitch = document.getElementById('themeSwitch');
+    const body = document.body;
+
+    // Check localStorage for theme preference
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme === 'dark') {
+      body.classList.add('dark-mode');
+      themeSwitch.classList.add('dark-mode');
+    }
+
+    // Toggle theme on button click
+    themeSwitch.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      themeSwitch.classList.toggle('dark-mode');
+
+      // Save theme preference to localStorage
+      if (body.classList.contains('dark-mode')) {
+        localStorage.setItem('theme', 'dark');
+      } else {
+        localStorage.setItem('theme', 'light');
+      }
+    });
+  </script>
+</body>
+</html>

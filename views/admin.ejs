@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
+<!-- Link to your CSS or Bootstrap -->
+<link rel="stylesheet" href="/css/styles.css">
+<!-- Optional: Bootstrap CDN -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<!-- Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  /* Light Theme Styles */
+  body {
+    background-color: #f8f9fa;
+    color: #212529;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  .navbar {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #ddd;
+  }
+  .sidebar {
+    background-color: #ffffff;
+    border-right: 1px solid #ddd;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  .card {
+    border: 1px solid #ddd;
+  }
+
+  /* Dark Theme Styles */
+  body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+  }
+  body.dark-mode .navbar {
+    background-color: #1e1e1e !important;
+    border-bottom: 1px solid #333;
+  }
+  body.dark-mode .navbar-brand,
+  body.dark-mode .nav-link,
+  body.dark-mode .form-control,
+  body.dark-mode .btn-outline-success {
+    color: #e0e0e0 !important;
+  }
+  body.dark-mode .navbar-brand:hover,
+  body.dark-mode .nav-link:hover {
+    color: #ffffff !important;
+  }
+  body.dark-mode .sidebar {
+    background-color: #1e1e1e !important; /* Explicitly set sidebar background */
+    border-right: 1px solid #333;
+  }
+  body.dark-mode .sidebar .nav-link {
+    color: #e0e0e0 !important;
+  }
+  body.dark-mode .sidebar .nav-link.active {
+    color: #ffffff !important;
+    background-color: rgba(30, 68, 255, 0.2) !important;
+  }
+  body.dark-mode .card {
+    background-color: #2c2c2c;
+    border: 1px solid #444;
+    color: #e0e0e0;
+  }
+  body.dark-mode .btn-primary {
+    background-color: #1e88e5;
+    border-color: #1e88e5;
+  }
+  body.dark-mode .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+  }
+  body.dark-mode .btn-info {
+    background-color: #00acc1;
+    border-color: #00acc1;
+  }
+  body.dark-mode .btn-warning {
+    background-color: #fb8c00;
+    border-color: #fb8c00;
+  }
+  body.dark-mode .btn-success {
+    background-color: #43a047;
+    border-color: #43a047;
+  }
+  body.dark-mode .text-white {
+    color: #e0e0e0 !important;
+  }
+  body.dark-mode .badge-danger {
+    background-color: #ff5252;
+  }
+  body.dark-mode .form-control {
+    background-color: #2c2c2c;
+    border-color: #444;
+    color: #e0e0e0;
+  }
+  body.dark-mode .form-control::placeholder {
+    color: #aaa;
+  }
+  body.dark-mode .btn-outline-success {
+    border-color: #1e88e5;
+    color: #1e88e5;
+  }
+  body.dark-mode .btn-outline-success:hover {
+    background-color: #1e88e5;
+    color: #ffffff;
+  }
+
+  /* Switch Mode Button */
+  .theme-switch {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 30px;
+    background-color: #ccc;
+    border-radius: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+  }
+  .theme-switch.dark-mode {
+    background-color: #1e88e5;
+  }
+  .theme-switch .switch-circle {
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+  }
+  .theme-switch.dark-mode .switch-circle {
+    transform: translateX(30px);
+  }
+
+  /* Chart Container Styling */
+  #attendanceChartContainer {
+    width: 100%;
+    height: 400px; /* Fixed height to prevent endless expansion */
+  }
+</style>
+</head>
+<body>
+<!-- HEADER -->
+<header class="navbar navbar-expand-lg navbar-light bg-light">
+<a class="navbar-brand" href="/admin/dashboard">MyProject Admin</a>
+<form class="form-inline my-2 my-lg-0 ml-auto">
+<input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
+<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+</form>
+<ul class="navbar-nav ml-3">
+<li class="nav-item">
+<a class="nav-link" href="/admin/notifications">
+<i class="fa fa-bell"></i>
+<span class="badge badge-danger">3</span>
+</a>
+</li>
+<li class="nav-item dropdown">
+<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
+<img src="/images/NUTECH_logo.png" alt="Admin Avatar" class="rounded-circle" width="30"> Admin
+</a>
+<div class="dropdown-menu dropdown-menu-right">
+<a class="dropdown-item" href="/admin/profile">Profile</a>
+<a class="dropdown-item" href="/admin/settings">Settings</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" href="/admin/logout">Logout</a>
+</div>
+</li>
+</ul>
+</header>
+<div class="container-fluid">
+<div class="row">
+<!-- SIDEBAR -->
+<nav class="col-md-2 d-none d-md-block bg-light sidebar">
+<div class="sidebar-sticky">
+<ul class="nav flex-column">
+<li class="nav-item">
+<a class="nav-link active" href="/admin/dashboard" style="background-color: rgba(0, 68, 255, 0.1); border-radius: 5px;">
+<i class="fa fa-home"></i> Dashboard
+</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="/admin/students">
+<i class="fa fa-users"></i> Students
+</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="/admin/classes">
+<i class="fa fa-book"></i> Classes/Subjects
+</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="/admin/classes/enroll">
+<i class="fa fa-user-plus"></i> Assign Classes
+</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="/admin/attendance">
+<i class="fa fa-calendar-check"></i> Attendance
+</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="/admin/results">
+<i class="fa fa-chart-bar"></i> Results
+</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="/admin/reports">
+<i class="fa fa-file-alt"></i> Reports
+</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="/admin/settings">
+<i class="fa fa-cog"></i> Settings
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- MAIN CONTENT -->
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+<div class="pt-3 pb-2 mb-3 border-bottom">
+<h1 class="h2">Dashboard</h1>
+<p>Welcome, <%= admin.firstName %>!</p>
+</div>
+<!-- QUICK SUMMARY CARDS -->
+<div class="row">
+<div class="col-md-3">
+<div class="card text-white bg-primary mb-3">
+<div class="card-body">
+<h5 class="card-title">Total Students</h5>
+<p class="card-text"><%= totalStudents %></p>
+</div>
+</div>
+</div>
+<div class="col-md-3">
+<div class="card text-white bg-success mb-3">
+<div class="card-body">
+<h5 class="card-title">Total Classes</h5>
+<p class="card-text"><%= totalClasses %></p>
+</div>
+</div>
+</div>
+<div class="col-md-3">
+<div class="card text-white bg-warning mb-3">
+<div class="card-body">
+<h5 class="card-title" style="color: #2f2f2f;">Pending Approvals</h5>
+<p class="card-text" style="color: #2f2f2f;"><%= pendingApprovals %></p>
+</div>
+</div>
+</div>
+<div class="col-md-3">
+<div class="card text-white bg-danger mb-3">
+<div class="card-body">
+<h5 class="card-title">Today’s Attendance</h5>
+<p class="card-text"><%= todaysAttendance %>%</p>
+</div>
+</div>
+</div>
+</div>
+<div class="mb-4">
+  <a href="/admin/student-register" class="btn btn-primary">Add New Student</a>
+  <a href="/admin/classes/new" class="btn btn-secondary">Create New Class/Subject</a>
+  <a href="/admin/attendance/mark" class="btn btn-info">Mark Attendance</a>
+  <a href="/admin/classes/enroll" class="btn btn-warning">Assign Classes</a>
+  <a href="/admin/register" class="btn btn-success">Register New Admin</a>
+</div>
+<!-- ATTENDANCE CHART -->
+<div class="mb-4">
+<h4 class="mt-4">Attendance Over the Past Week</h4>
+<div id="attendanceChartContainer">
+  <canvas id="attendanceChart"></canvas>
+</div>
+</div>
+</main>
+</div>
+</div>
+
+<!-- Theme Switch Button -->
+<div class="theme-switch" id="themeSwitch">
+  <div class="switch-circle"></div>
+</div>
+
+<!-- Optional: Include jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script>
+  // Theme Toggle Logic
+  const themeSwitch = document.getElementById('themeSwitch');
+  const body = document.body;
+
+  // Check localStorage for theme preference
+  const currentTheme = localStorage.getItem('theme');
+  if (currentTheme === 'dark') {
+    body.classList.add('dark-mode');
+    themeSwitch.classList.add('dark-mode');
+  }
+
+  // Toggle theme on button click
+  themeSwitch.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
+    themeSwitch.classList.toggle('dark-mode');
+
+    // Save theme preference to localStorage
+    if (body.classList.contains('dark-mode')) {
+      localStorage.setItem('theme', 'dark');
+    } else {
+      localStorage.setItem('theme', 'light');
+    }
+  });
+
+  const attendanceData = <%- JSON.stringify(attendanceData) %>;
+
+  // Prepare labels and values for the chart
+  const labels = attendanceData.map(entry => entry.date);
+  const attendancePercentages = attendanceData.map(entry => entry.attendancePercentage);
+
+  // Define colors based on attendance percentage
+  const backgroundColors = attendancePercentages.map(percentage => {
+    if (percentage === 50) {
+      return 'rgba(255, 255, 0, 0.6)'; // Yellow for exactly 50%
+    }
+    return percentage > 50 ? 'rgba(135, 206, 250, 0.6)' : 'rgba(255, 182, 193, 0.6)'; // Light blue for >50%, light pink for <50%
+  });
+  const borderColors = attendancePercentages.map(percentage => {
+    if (percentage === 50) {
+      return 'rgba(255, 255, 0, 1)'; // Solid yellow for borders
+    }
+    return percentage > 50 ? 'rgba(135, 206, 250, 1)' : 'rgba(255, 182, 193, 1)'; // Solid colors for borders
+  });
+
+  // Create the chart
+  const ctx = document.getElementById('attendanceChart').getContext('2d');
+  const attendanceChart = new Chart(ctx, {
+    type: 'bar', // Use a bar chart
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Attendance (%)',
+        data: attendancePercentages,
+        backgroundColor: backgroundColors,
+        borderColor: borderColors,
+        borderWidth: 1,
+        borderRadius: 5, // Rounded corners for bars
+        borderSkipped: false, // Ensure all corners are rounded
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          grid: {
+            display: false, // Remove vertical grid lines
+          },
+        },
+        y: {
+          beginAtZero: true,
+          max: 100,
+          ticks: {
+            callback: function(value) {
+              return value + '%';
+            }
+          },
+          grid: {
+            color: 'rgba(0, 0, 0, 0.1)', // Light grid lines
+          },
+        },
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return `${context.parsed.y}%`;
+            }
+          }
+        },
+        legend: {
+          display: true,
+          position: 'top',
+        },
+      },
+    },
+  });
+</script>
+</body>
+</html>
