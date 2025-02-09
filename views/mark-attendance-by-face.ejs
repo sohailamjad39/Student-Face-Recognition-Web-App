@@ -6,17 +6,49 @@
   <title>Mark Attendance</title>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <!-- Custom Styles -->
   <style>
+    /* Global Styles */
     body {
       background-color: #121212;
       color: #ffffff;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
+
+    /* Light Theme Styles */
+    body.light-mode {
+      background-color: #f4f6f9;
+      color: #333;
+    }
+    body.light-mode .class-item {
+      background-color: #ffffff;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+    body.light-mode .class-item button {
+      background-color: #007bff;
+      color: #ffffff;
+    }
+    body.light-mode .class-item button:hover {
+      background-color: #0056b3;
+    }
+    body.light-mode .error {
+      color: #dc3545;
+    }
+
+    /* Dark Theme Styles */
     .container {
       margin-top: 50px;
       text-align: center;
     }
     h1 {
       color: #00bcd4;
+      font-weight: bold;
     }
     p {
       font-size: 1.2em;
@@ -32,6 +64,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      transition: background-color 0.3s ease;
     }
     .class-item button {
       background-color: #00bcd4;
@@ -40,6 +73,7 @@
       padding: 10px 20px;
       border-radius: 5px;
       cursor: pointer;
+      transition: background-color 0.3s ease;
     }
     .class-item button:hover {
       background-color: #0097a7;
@@ -48,9 +82,50 @@
       color: #ff5252;
       font-size: 1.2em;
     }
+
+    /* Theme Switch */
+    .theme-switch {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 30px;
+      background-color: #ccc;
+      border-radius: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease;
+      z-index: 1000;
+    }
+    .theme-switch.light-mode {
+      background-color: #007bff;
+    }
+    .theme-switch .switch-circle {
+      width: 20px;
+      height: 20px;
+      background-color: white;
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+    .theme-switch.light-mode .switch-circle {
+      transform: translateX(30px);
+    }
+
+    /* Add Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .animated {
+      animation: fadeIn 1s ease-in-out;
+    }
   </style>
 </head>
-<body>
+<body class="animated">
   <div class="container">
     <h1>Mark Attendance</h1>
 
@@ -72,5 +147,33 @@
       </div>
     <% } %>
   </div>
+
+  <!-- Theme Switch Button -->
+  <div class="theme-switch" id="themeSwitch">
+    <div class="switch-circle"></div>
+  </div>
+
+  <!-- Optional: Include jQuery and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script>
+    // Theme Toggle Logic
+    const themeSwitch = document.getElementById('themeSwitch');
+    const body = document.body;
+
+    // Check localStorage for theme preference
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme === 'light') {
+      body.classList.add('light-mode');
+      themeSwitch.classList.add('light-mode');
+    }
+
+    // Toggle theme on button click
+    themeSwitch.addEventListener('click', () => {
+      body.classList.toggle('light-mode');
+      themeSwitch.classList.toggle('light-mode');
+      localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
+    });
+  </script>
 </body>
 </html>
