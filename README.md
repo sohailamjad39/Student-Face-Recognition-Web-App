@@ -118,10 +118,10 @@ Feel free to fork this repository and submit pull requests with improvements.
 ---
 
 ## License
-This project is open-source and available under the [MIT License](LICENSE).
+This project is open-source and available under the [MIT License](LICENSE)
 
 ---
 
 ## Author
-Developed by [Sohail Amjad](https://github.com/sohailamjad39).
+Developed by [Sohail Amjad](https://github.com/sohailamjad39)
 
