@@ -30,6 +30,20 @@ This project is a **Student Face Recognition Attendance System** built using **E
 
 ---
 
+## Requirements
+
+To successfully run this project after cloning the repository, ensure you have the following installed on your system:
+
+- **Node.js** (v14 or later) – [Download Here](https://nodejs.org/)
+- **MongoDB** (latest stable version) – [Download Here](https://www.mongodb.com/try/download/community)
+- **Git** (latest version) – [Download Here](https://git-scm.com/downloads)
+- **A modern web browser** (Chrome, Firefox, Edge, etc.)
+- **PowerShell (For Windows users)** – Required if you face execution policy issues
+
+Additionally, make sure MongoDB is running before starting the project.
+
+---
+
 ## Installation & Setup
 
 Follow these steps to set up and run the project on your local machine:
